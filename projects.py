@@ -35,7 +35,7 @@ def main(): #! Функция для общения с пользователе�
                 view_task(tasks)
             case "3":
                 print("Вы выбрали функцию обновления задачи. Доступные задачи:\n")
-                update_task(tasks)
+                edit_task(tasks)
             case "4":
                 print("Вы выбрали функцию удаления задачи. Доступные задачи:\n")
                 delete_task(tasks)
@@ -66,7 +66,7 @@ def task_assembly(tasks):
         "Статус": STATUS.get(task_status, "new")
     }
 
-    print(f"Задача номер ${task_number} была успешно добавлена")
+    print(f"Задача номер {task_number} была успешно добавлена")
 
 def view_task(tasks):
     if not tasks:
@@ -74,16 +74,31 @@ def view_task(tasks):
     for task_id, task_info in tasks.items():
         print(f"Задача {task_id}: \n{task_info['Заголовок']}: {task_info['Описание']}, \n Приоритет задачи: {task_info['Приоритет']},\n Статус задачи: {task_info['Статус']}")
 
-def update_task(tasks):
-    print("TIME")
-def delete_task(tasks):
-    task_to_delete = int(input("Выберите задачу для удаления:\n"))
+def edit_task(tasks):
+    task_to_edit = int(input("Выберите задачу для редактирования"))
     print(tasks)
-    for task_id in tasks.items():
-        if task_to_delete == task_id:
-            del tasks[task_id]
-            print("Задача была успешно удалена!")
-    quit()
+
+    if task_to_edit in tasks:
+        task_title = input("Введите заголовок задачи: ")
+        task_description = input("Введите описание задачи: ")
+        task_priority = input("Введите приоритет (1 - низкий, 2 - средний, 3 - высокий): ")
+        task_status = input("Введите статус задачи (1 - новая, 2 - в процессе, 3 - завершена): ")
+        tasks[task_to_edit] = {
+            "Заголовок": task_title,
+            "Описание": task_description,
+            "Приоритет": PRIORITY.get(task_priority, "low"),
+            "Статус": STATUS.get(task_status, "new")
+        }
+
+
+def delete_task(tasks):
+    task_to_delete = int(input("Выберите задачу для удаления: "))
+    print(tasks)
+    if task_to_delete in tasks:
+        del tasks[task_to_delete]
+        print("Задача была успешно удалена!")
+    else:
+        print("Такой задачи нет( ")
 
 if __name__ == "__main__":
     main()
