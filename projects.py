@@ -77,7 +77,14 @@ def view_task(tasks):
 def update_task(tasks):
     print("TIME")
 def delete_task(tasks):
-    print("tme")
+    task_to_delete = int(input("Выберите задачу для удаления:\n"))
+    print(tasks)
+    for task_id in tasks.items():
+        if task_to_delete == task_id:
+            del tasks[task_id]
+            print("Задача была успешно удалена!")
+    quit()
+
 if __name__ == "__main__":
     main()
 
