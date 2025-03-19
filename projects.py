@@ -66,7 +66,8 @@ def task_assembly(tasks):
         "Статус": STATUS.get(task_status, "new")
     }
 
-    print(f"Задача номер {task_number} была успешно добавлена")
+    with open("tasks.txt.txt", "w") as file:
+        file.write(tasks[task_number])
 
 def view_task(tasks):
     if not tasks:
@@ -89,13 +90,16 @@ def edit_task(tasks):
             "Приоритет": PRIORITY.get(task_priority, "low"),
             "Статус": STATUS.get(task_status, "new")
         }
-
+    with open("tasks.txt.txt", "w") as file:
+        file.write(tasks[task_to_edit])
 
 def delete_task(tasks):
     task_to_delete = int(input("Выберите задачу для удаления: "))
     print(tasks)
     if task_to_delete in tasks:
         del tasks[task_to_delete]
+        with open("tasks.txt.txt", "r") as file:
+            file.readline(tasks[task_to_delete])
         print("Задача была успешно удалена!")
     else:
         print("Такой задачи нет( ")
