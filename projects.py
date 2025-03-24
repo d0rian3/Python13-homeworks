@@ -39,18 +39,24 @@ def load_tasks():
         pass
     return tasks
 
-def save_tasks(tasks):
+def save_tasks(tasks: dict[int, dict[str, str]]) -> None:
     with open("tasks.txt", "w") as file:
         for task_id, task in tasks.items():
             file.write(
                 f"{task_id} | {task['Заголовок']} | {task['Описание']} | {task['Приоритет']} | {task['Статус']}\n")
 
-def task_assembly(tasks):
+def task_assembly(tasks: dict[int, dict[str, str]]) -> None:
     task_number = len(tasks) + 1
     task_title = input("Введите заголовок задачи: ")
     task_description = input("Введите описание задачи: ")
     task_priority = input("Введите приоритет (1 - низкий, 2 - средний, 3 - высокий): ")
     task_status = input("Введите статус задачи (1 - новая, 2 - в процессе, 3 - завершена): ")
+
+    if task_priority != "1" or task_priority != "2" or task_priority != "3":
+        task_priority = "2"
+
+    if task_status != "1" or task_status != "2" or task_status != "3":
+        task_priority = "1"
 
     tasks[task_number] = {
         "Заголовок": task_title,
@@ -61,48 +67,64 @@ def task_assembly(tasks):
     save_tasks(tasks)
     print(f"Задача номер {task_number} была успешно добавлена")
 
-def view_task(tasks):
+
+
+
+
+def view_task(tasks: dict[int, dict[str, str]]) -> None:
     if not tasks:
         print("Данной задачи нет, увы(")
     for task_id, task_info in tasks.items():
 
         print(f"Задача {task_id}: \n{task_info['Заголовок']}: {task_info['Описание']}, \n Приоритет задачи: {task_info['Приоритет']},\n Статус задачи: {task_info['Статус']}")
 
-def edit_task(tasks):
+def edit_task(tasks: dict[int, dict[str, str]]) -> None:
     view_task(tasks)
     task_to_edit = input("Выберите задачу для редактирования: ")
 
+    if task_to_edit.isdigit():
+        task_to_edit = int(task_to_edit)
 
-    if task_to_edit in tasks:
-        task_title = input("Введите заголовок задачи: ")
-        task_description = input("Введите описание задачи: ")
-        task_priority = input("Введите приоритет (1 - низкий, 2 - средний, 3 - высокий): ")
-        task_status = input("Введите статус задачи (1 - новая, 2 - в процессе, 3 - завершена): ")
+        if task_to_edit in tasks:
+            task_title = input("Введите заголовок задачи: ")
+            task_description = input("Введите описание задачи: ")
+            task_priority = input("Введите приоритет (1 - низкий, 2 - средний, 3 - высокий): ")
+            task_status = input("Введите статус задачи (1 - новая, 2 - в процессе, 3 - завершена): ")
 
-        tasks[task_to_edit] = {
-            "Заголовок": task_title,
-            "Описание": task_description,
-            "Приоритет": PRIORITY.get(task_priority, "low"),
-            "Статус": STATUS.get(task_status, "new")
-        }
-        save_tasks(tasks)
-        print("Задача была успешно обновлена!")
+            tasks[task_to_edit] = {
+                "Заголовок": task_title,
+                "Описание": task_description,
+                "Приоритет": PRIORITY.get(task_priority, "low"),
+                "Статус": STATUS.get(task_status, "new")
+            }
+            save_tasks(tasks)
+            print("Задача была успешно обновлена!")
+        else:
+            print("Такой задачи нет(")
+
     else:
-        print("Такой задачи нет(")
+        print("Некорректный ввод! Введите номер задачи.")
 
-def delete_task(tasks):
+def delete_task(tasks: dict[int, dict[str, str]]) -> None:
     view_task(tasks)
     task_to_delete = input("Выберите задачу для удаления: ")
 
-    if task_to_delete in tasks:
-        del tasks[task_to_delete]
-        save_tasks(tasks)
-        print("Задача была успешно удалена!")
-    else:
-        print("Такой задачи нет( ")
+    if task_to_delete.isdigit():
+        task_to_delete = int(task_to_delete)
 
+
+        if task_to_delete in tasks:
+            del tasks[task_to_delete]
+            save_tasks(tasks)
+            print("Задача была успешно удалена!")
+        else:
+            print("Такой задачи нет( ")
+    else:
+        print("Некорректный ввод! Введите номер задачи.")
 def main(): #! Функция для общения с пользователем и вызовом остальных функций
     tasks = load_tasks()
+
+
     while True:
         first_choice = input("Выберите действие:\n- 1 - Создать новую задачу\n- 2 - Просмотреть задачи\n- 3 - Обновить задачу\n- 4 - Удалить задачу\n- 0 - Выйти из программы\n")
         match first_choice:
