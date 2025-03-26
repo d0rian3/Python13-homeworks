@@ -386,9 +386,15 @@ class Student:
     def __gt__(self, other: "Student") -> bool:
         return self.average_mark() > other.average_mark()
 
-class Group(Student):
+class Group:
 
+    def __init__(self, name: str, students: list[Student] = None) -> None:
+        self.name = name
+        self.students = students if students else []
 
-
-
-
+    def add_student(self, student: Student) -> None:
+        self.students.append(student)
+    def delete_student(self, student: Student)->None:
+        self.students.remove(student)
+    def best_student(self)-> Student:
+        return max(self.students, key=lambda student: student.average_mark())
